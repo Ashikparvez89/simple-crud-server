@@ -48,9 +48,27 @@ async function run() {
       console.log(result);
     });
 
+     // ------Update user-------//
+
+     app.put('/user/:id', async(req,res)=>{
+      const id = req.params.id;
+      const updateduser = req.body;
+      console.log(id,updateduser)
+      const filter = { _id: new ObjectId(id)}
+      const options = {upsert : true}
+      const finaluser = {
+        $set: {
+          name : updateduser.name,
+          email: updateduser.email,
+        }
+      }
+      const result = await userCollection.updateOne(filter,finaluser,options)
+      res.send(result)
+     })
+
     // ------Delete User-------//
 
-    app.delete("/user/:id", async (req, res) => {
+    app.delete("/user/:id", async(req, res) => {
       const id = req.params.id;
       console.log("plesase delete this is", id);
       const query = { _id: new ObjectId(id) };
